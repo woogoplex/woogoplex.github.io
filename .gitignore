@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.obsidian/*
+!.obsidian/app.json
+!.obsidian/appearance.json
+!.obsidian/snippets/
+!.obsidian/snippets/*.css
+# in case content/ ever gets opened as its own vault by mistake
+# (the correct vault root is the repo root)
+content/.obsidian/

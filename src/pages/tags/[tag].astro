@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { postSlug, projectSlug } from '../../lib/slugs';
+import { href } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('projectPosts');
+  const notes = await getCollection('notes');
+  const items = [
+    ...posts.map((p) => ({
+      tags: p.data.tags, title: p.data.title, date: p.data.date,
+      url: `/projects/${projectSlug(p.id)}/${postSlug(p.id)}/`,
+    })),
+    ...notes.map((n) => ({
+      tags: n.data.tags, title: n.data.title, date: n.data.date,
+      url: `/notes/${postSlug(n.id)}/`,
+    })),
+  ];
+  const tags = [...new Set(items.flatMap((i) => i.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      items: items
+        .filter((i) => i.tags.includes(tag))
+        .sort((a, b) => b.date.valueOf() - a.date.valueOf()),
+    },
+  }));
+}
+
+const { tag } = Astro.params;
+const { items } = Astro.props;
+---
+<Base title={`#${tag}`}>
+  <h1>#{tag}</h1>
+  <p class="meta">{items.length} {items.length === 1 ? 'entry' : 'entries'}</p>
+  <ul class="post-list" style="margin-top: 2rem;">
+    {items.map((i) => (
+      <li>
+        <FormattedDate date={i.date} />
+        <a href={href(i.url)}>{i.title}</a>
+      </li>
+    ))}
+  </ul>
+</Base>

@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { getNotes, getPostsOf, getProjects } from '../lib/content';
+import { postSlug, projectSlug } from '../lib/slugs';
+import { href } from '../lib/url';
+
+const projects = await getProjects();
+const notes = (await getNotes()).slice(0, 5);
+const projectCards = await Promise.all(
+  projects.map(async (p) => {
+    const slug = projectSlug(p.id);
+    const posts = await getPostsOf(slug);
+    return { slug, data: p.data, count: posts.length, latest: posts[0]?.data.date };
+  }),
+);
+---
+<Base>
+  <div class="hero">
+    <h1>Watching the world<br /><em>up close.</em></h1>
+    <p>
+      I'm Woojin, 14. I study how society, the economy, and the environment
+      work — starting from my own neighborhood — and write down what I find.
+    </p>
+  </div>
+
+  <p class="overline">Projects</p>
+  <ul class="entries">
+    {projectCards.map((p) => (
+      <li class="entry">
+        <span class="entry-num" aria-hidden="true"></span>
+        <div class="entry-body">
+          <a class="entry-title" href={href(`/projects/${p.slug}/`)}>{p.data.title}</a>
+          <p class="desc">{p.data.description}</p>
+          <p class="meta">
+            <span class={`status ${p.data.status}`}>{p.data.status}</span>
+            <span>since {p.data.started}</span>
+            <span>{p.count} {p.count === 1 ? 'post' : 'posts'}</span>
+          </p>
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <p class="overline">Recent notes</p>
+  <ul class="post-list">
+    {notes.map((n) => (
+      <li>
+        <FormattedDate date={n.data.date} />
+        <a href={href(`/notes/${postSlug(n.id)}/`)}>{n.data.title}</a>
+      </li>
+    ))}
+  </ul>
+</Base>

@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import { postSlug, projectSlug } from '../../../lib/slugs';
+import { href } from '../../../lib/url';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('projectPosts');
+  return posts.map((p) => ({
+    params: { project: projectSlug(p.id), post: postSlug(p.id) },
+    props: { post: p },
+  }));
+}
+
+const { post } = Astro.props;
+const projSlug = projectSlug(post.id);
+const projects = await getCollection('projects');
+const proj = projects.find((p) => projectSlug(p.id) === projSlug);
+const { Content } = await render(post);
+---
+<Base title={post.data.title}>
+  <article data-pagefind-body>
+    <p class="crumb"><a href={href(`/projects/${projSlug}/`)}>← {proj?.data.title ?? projSlug}</a></p>
+    <h1>{post.data.title}</h1>
+    <p class="meta">
+      <FormattedDate date={post.data.date} />
+      {post.data.tags.map((t) => <a class="tag" href={href(`/tags/${t}/`)}>{t}</a>)}
+    </p>
+    <Content />
+    <p class="end-mark">◼</p>
+  </article>
+</Base>

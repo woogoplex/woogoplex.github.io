@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getNotes } from '../../lib/content';
+import { postSlug } from '../../lib/slugs';
+import { href } from '../../lib/url';
+
+const notes = await getNotes();
+---
+<Base title="Notes" description="Short thoughts and reading notes">
+  <h1>Notes</h1>
+  <p class="meta">Short thoughts, reading notes, open questions.</p>
+  <ul class="post-list" style="margin-top: 2rem;">
+    {notes.map((n) => (
+      <li>
+        <FormattedDate date={n.data.date} />
+        <a href={href(`/notes/${postSlug(n.id)}/`)}>{n.data.title}</a>
+      </li>
+    ))}
+  </ul>
+</Base>

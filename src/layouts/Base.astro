@@ -1,0 +1,66 @@
+---
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/newsreader/wght-italic.css';
+import '@fontsource-variable/jetbrains-mono';
+import { href } from '../lib/url';
+import '../styles/global.css';
+
+interface Props { title?: string; description?: string }
+const { title, description = 'Projects and notes by Woojin' } = Astro.props;
+const site = 'Woojin';
+const pageTitle = title ? `${title} · ${site}` : `${site} — projects and notes`;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href={href('/favicon.svg')} type="image/svg+xml" />
+    <link rel="canonical" href={Astro.url} />
+    <link rel="alternate" type="application/rss+xml" title={site} href={href('/rss.xml')} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta name="generator" content={Astro.generator} />
+    <script is:inline>
+      // apply the saved theme before first paint, to avoid a flash
+      (function () {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+      })();
+    </script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href={href('/')}>{site}</a>
+      <nav>
+        <a href={href('/projects/')}>Projects</a>
+        <a href={href('/notes/')}>Notes</a>
+        <a href={href('/about/')}>About</a>
+        <a href={href('/search/')}>Search</a>
+        <button id="theme-toggle" aria-label="Switch color theme">
+          <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer>
+      <span>© {new Date().getFullYear()} Woojin</span>
+      <span>Written by hand, one week at a time · <a href={href('/rss.xml')}>RSS</a></span>
+    </footer>
+    <script is:inline>
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        var root = document.documentElement;
+        var dark =
+          root.dataset.theme === 'dark' ||
+          (root.dataset.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        var next = dark ? 'light' : 'dark';
+        root.dataset.theme = next;
+        localStorage.setItem('theme', next);
+      });
+    </script>
+  </body>
+</html>

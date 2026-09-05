@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import { getPostsOf } from '../../../lib/content';
+import { postSlug, projectSlug } from '../../../lib/slugs';
+import { href } from '../../../lib/url';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { project: projectSlug(p.id) }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const slug = projectSlug(project.id);
+const posts = await getPostsOf(slug);
+const { Content } = await render(project);
+---
+<Base title={project.data.title} description={project.data.description}>
+  <article>
+    <p class="crumb"><a href={href('/projects/')}>← Projects</a></p>
+    <h1>{project.data.title}</h1>
+    <p class="meta">
+      <span class={`status ${project.data.status}`}>{project.data.status}</span>
+      <span>since {project.data.started}</span>
+      <span>{posts.length} {posts.length === 1 ? 'post' : 'posts'}</span>
+    </p>
+    <Content />
+    <p class="overline">Log</p>
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li>
+          <FormattedDate date={post.data.date} />
+          <a href={href(`/projects/${slug}/${postSlug(post.id)}/`)}>{post.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  </article>
+</Base>

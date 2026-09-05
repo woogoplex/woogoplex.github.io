@@ -1,0 +1,16 @@
+/* Hides site code/tooling folders and files from the file explorer, so only
+   content/ shows up. Unlike the "Excluded files" setting, this actually
+   makes them disappear from the view. */
+.nav-folder:has(> .nav-folder-title[data-path="src"]),
+.nav-folder:has(> .nav-folder-title[data-path="dist"]),
+.nav-folder:has(> .nav-folder-title[data-path="node_modules"]),
+.nav-folder:has(> .nav-folder-title[data-path="public"]),
+.nav-file:has(> .nav-file-title[data-path="astro.config.mjs"]),
+.nav-file:has(> .nav-file-title[data-path="package.json"]),
+.nav-file:has(> .nav-file-title[data-path="package-lock.json"]),
+.nav-file:has(> .nav-file-title[data-path="tsconfig.json"]),
+.nav-file:has(> .nav-file-title[data-path="README.md"]),
+.nav-file:has(> .nav-file-title[data-path="MAINTENANCE.md"]),
+.nav-file:has(> .nav-file-title[data-path="GUIDELINES.md"]) {
+  display: none;
+}

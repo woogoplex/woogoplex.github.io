@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPostsOf, getProjects } from '../../lib/content';
+import { projectSlug } from '../../lib/slugs';
+import { href } from '../../lib/url';
+
+const projects = await getProjects();
+const cards = await Promise.all(
+  projects.map(async (p) => {
+    const slug = projectSlug(p.id);
+    return { slug, data: p.data, count: (await getPostsOf(slug)).length };
+  }),
+);
+---
+<Base title="Projects" description="Long-running projects by Woojin">
+  <h1>Projects</h1>
+  <p class="meta">Long-running questions, answered slowly.</p>
+  <ul class="entries" style="margin-top: 2rem;">
+    {cards.map((p) => (
+      <li class="entry">
+        <span class="entry-num" aria-hidden="true"></span>
+        <div class="entry-body">
+          <a class="entry-title" href={href(`/projects/${p.slug}/`)}>{p.data.title}</a>
+          <p class="desc">{p.data.description}</p>
+          <p class="meta">
+            <span class={`status ${p.data.status}`}>{p.data.status}</span>
+            <span>since {p.data.started}</span>
+            <span>{p.count} {p.count === 1 ? 'post' : 'posts'}</span>
+          </p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</Base>

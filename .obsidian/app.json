@@ -1,0 +1,22 @@
+{
+  "attachmentFolderPath": "./images",
+  "useMarkdownLinks": true,
+  "newLinkFormat": "relative",
+  "showUnsupportedFiles": true,
+  "userIgnoreFilters": [
+    "node_modules/",
+    "dist/",
+    ".astro/",
+    "src/",
+    "public/",
+    ".github/",
+    "package.json",
+    "package-lock.json",
+    "astro.config.mjs",
+    "tsconfig.json",
+    "README.md",
+    "MAINTENANCE.md",
+    "GUIDELINES.md"
+  ],
+  "promptDelete": false
+}

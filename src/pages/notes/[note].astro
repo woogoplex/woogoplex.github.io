@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { postSlug } from '../../lib/slugs';
+import { href } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((n) => ({ params: { note: postSlug(n.id) }, props: { note: n } }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+<Base title={note.data.title}>
+  <article data-pagefind-body>
+    <p class="crumb"><a href={href('/notes/')}>← Notes</a></p>
+    <h1>{note.data.title}</h1>
+    <p class="meta">
+      <FormattedDate date={note.data.date} />
+      {note.data.tags.map((t) => <a class="tag" href={href(`/tags/${t}/`)}>{t}</a>)}
+    </p>
+    <Content />
+    <p class="end-mark">◼</p>
+  </article>
+</Base>

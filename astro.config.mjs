@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import pagefind from 'astro-pagefind';
 
 export default defineConfig({
-  site: 'https://woogoplex.github.io',
+  site: 'https://woojingo.com',
   base: '/',
   trailingSlash: 'always',
   integrations: [sitemap(), pagefind()],

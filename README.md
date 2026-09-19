@@ -44,7 +44,11 @@ woogoplex.github.io/   ← open this whole folder as the Obsidian vault (not jus
 
 ## Starting a new project
 
-Make a folder under `content/projects/` with an `index.md`:
+Make a **folder** under `content/projects/`, with an `index.md` inside it:
+
+```
+content/projects/my-project-name/index.md
+```
 
 ```
 ---
@@ -55,6 +59,11 @@ status: active        # active | paused | done
 ---
 (a short intro)
 ```
+
+> **Common mistake:** a file placed directly inside `content/projects/`
+> (like `content/projects/my-project.md`, with no folder around it) will not
+> show up anywhere on the site — not even as an error, it's just silently
+> skipped. A project always needs its own folder with an `index.md` inside.
 
 The list of posts is generated automatically — no index to maintain by hand.
 

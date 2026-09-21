@@ -60,10 +60,19 @@ status: active        # active | paused | done
 (a short intro)
 ```
 
+> **Forgot `index.md`?** No problem. A folder that only has posts still gets a
+> project page: the folder name is used as the title and the first post sets
+> the start month. Add `index.md` whenever you want a real title, description
+> and intro.
+>
 > **Common mistake:** a file placed directly inside `content/projects/`
 > (like `content/projects/my-project.md`, with no folder around it) will not
-> show up anywhere on the site — not even as an error, it's just silently
-> skipped. A project always needs its own folder with an `index.md` inside.
+> show up anywhere on the site. It is silently skipped. Posts always live
+> inside a project folder.
+>
+> **If the site stops updating:** open the repo on GitHub and look at the
+> Actions tab. A red run usually means a note's front matter is broken (for
+> example a `tags:` line with nothing after it). Fix the file and push again.
 
 The list of posts is generated automatically — no index to maintain by hand.
 

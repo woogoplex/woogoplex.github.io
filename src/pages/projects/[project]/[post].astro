@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
+import { getProject } from '../../../lib/content';
 import { postSlug, projectSlug } from '../../../lib/slugs';
 import { href } from '../../../lib/url';
 
@@ -15,8 +16,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const projSlug = projectSlug(post.id);
-const projects = await getCollection('projects');
-const proj = projects.find((p) => projectSlug(p.id) === projSlug);
+const proj = await getProject(projSlug);
 const { Content } = await render(post);
 ---
 <Base title={post.data.title}>

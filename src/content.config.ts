@@ -1,6 +1,15 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// Obsidian's properties editor leaves `tags:` with nothing after it when the
+// last tag is removed. YAML reads that as null, so accept null and treat it as
+// "no tags" instead of failing the whole build.
+const tags = z
+  .array(z.string())
+  .nullable()
+  .optional()
+  .transform((v) => v ?? []);
+
 const projects = defineCollection({
   loader: glob({ pattern: '*/index.md', base: './content/projects' }),
   schema: z.object({
@@ -16,7 +25,7 @@ const projectPosts = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    tags: z.array(z.string()).default([]),
+    tags: tags,
   }),
 });
 
@@ -25,7 +34,7 @@ const notes = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    tags: z.array(z.string()).default([]),
+    tags: tags,
   }),
 });
 

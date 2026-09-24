@@ -1,20 +1,21 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
-import { getPostsOf } from '../../../lib/content';
+import { getPostsOf, getProjects } from '../../../lib/content';
 import { postSlug, projectSlug } from '../../../lib/slugs';
 import { href } from '../../../lib/url';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
+  const projects = await getProjects();
   return projects.map((p) => ({ params: { project: projectSlug(p.id) }, props: { project: p } }));
 }
 
 const { project } = Astro.props;
 const slug = projectSlug(project.id);
 const posts = await getPostsOf(slug);
-const { Content } = await render(project);
+// A folder without index.md has no intro to render; the log below still shows.
+const Content = project.entry ? (await render(project.entry)).Content : null;
 ---
 <Base title={project.data.title} description={project.data.description}>
   <article>
@@ -25,7 +26,7 @@ const { Content } = await render(project);
       <span>since {project.data.started}</span>
       <span>{posts.length} {posts.length === 1 ? 'post' : 'posts'}</span>
     </p>
-    <Content />
+    {Content && <Content />}
     <p class="overline">Log</p>
     <ul class="post-list">
       {posts.map((post) => (

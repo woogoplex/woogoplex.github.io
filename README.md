@@ -39,8 +39,9 @@ woogoplex.github.io/   ← open this whole folder as the Obsidian vault (not jus
    ---
    ```
 
-3. Commit & push with the Obsidian Git plugin (Command Palette → "Git: Commit-and-sync")
-4. The site updates in 2–3 minutes
+3. Drag files into the note if you want: a PDF shows up as an inline viewer, a video or audio file as a player, and anything else (slides, docs, zips) as a download card. Keep files under about 5 MB; put big videos on YouTube and link to them instead.
+4. Commit & push with the Obsidian Git plugin (Command Palette → "Git: Commit-and-sync")
+5. The site updates in 2–3 minutes
 
 ## Starting a new project
 

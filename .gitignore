@@ -10,3 +10,6 @@ dist/
 # in case content/ ever gets opened as its own vault by mistake
 # (the correct vault root is the repo root)
 content/.obsidian/
+
+# local tooling
+.claude/
